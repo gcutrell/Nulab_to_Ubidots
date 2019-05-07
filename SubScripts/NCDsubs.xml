@@ -1,0 +1,312 @@
+<scripts>
+  
+  <script name="RelayConfig">
+    <set var="r1on" value="FE 6C 01" />
+    <set var="r1off" value="FE 64 01" />
+    <set var="r2on" value="FE 6D 01" />
+    <set var="r2off" value="FE 65 01" />
+    <set var="r3on" value="FE 6E 01" />
+    <set var="r3off" value="FE 66 01" />
+    <set var="r4on" value="FE 6F 01" />
+    <set var="r4off" value="FE 67 01" />
+    <set var="r5on" value="FE 70 01" />
+    <set var="r5off" value="FE 68 01" />
+    <set var="r6on" value="FE 71 01" />
+    <set var="r6off" value="FE 69 01" />
+    <set var="r7on" value="FE 72 01" />
+    <set var="r7off" value="FE 6A 01" />
+    <set var="r8on" value="FE 73 01" />
+    <set var="r8off" value="FE 6B 01" />
+    <set var="AllOff" value="FE 81 01" />
+        
+    <set var="r1status" value="FE 74 01" />
+    <set var="r2status" value="FE 75 01" />
+    <set var="r3status" value="FE 76 01" />
+    <set var="r4status" value="FE 77 01" />
+    <set var="r5status" value="FE 78 01" />
+    <set var="r6status" value="FE 79 01" />
+    <set var="r7status" value="FE 7A 01" />
+    <set var="r8status" value="FE 7B 01" />
+  </script>
+
+  <script name="ReadRelayStatus">
+        <setdevice name="NCD_RelayBoard" />
+        <set var="0xNCDstatus" value="" />
+        <send string="[RelayStatus]" type ="Hex" behavior="numberofbytes" bytes="2"
+            bytescollected="NumOfBytes" var="0xNCDstatus" timeout="1000"/>
+        <log message="Bytes collected = [NumOfBytes], Status =  [0xNCDstatus]" />
+          <if condition="'[0xNCDstatus]' = '3F00'" onfail="true" >
+            <log message="**** Relay off *****" />
+            <set var="status" value="OPEN" />
+          </if>
+
+          <if condition="'[0xNCDstatus]' == '3F01'" onfail="true" >
+            <log message="**** Relay on *****" />
+            <set var="status" value="CLOSED" />
+          </if>
+        <set var="RelayAction"  value="" />
+        <pause ms="[Interval]" />
+  </script>
+  
+  <script name="RelayTestB1">
+    <!-- Call this script via <run script="subscript3" /> -->
+     <setdevice name="NCD_RelayBoard" />
+     <set var="RelayAction" value="[r1on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r1status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_1" value="[status]" />
+
+     <set var="RelayAction" value="[r1off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r1status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_1" value="[status]" />
+
+     <set var="RelayAction" value="[r2on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r2status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_2" value="[status]" />
+
+     <set var="RelayAction" value="[r2off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r2status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_2" value="[status]" />
+
+     <set var="RelayAction" value="[r3on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r3status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_3" value="[status]" />
+
+     <set var="RelayAction" value="[r3off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r3status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_3" value="[status]" />
+
+     <set var="RelayAction" value="[r4on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r4status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_4" value="[status]" />
+
+     <set var="RelayAction" value="[r4off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r4status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_4" value="[status]" />
+
+     <set var="RelayAction" value="[r5on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r5status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_5" value="[status]" />
+
+     <set var="RelayAction" value="[r5off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r5status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_5" value="[status]" />
+
+     <set var="RelayAction" value="[r6on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r6status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_6" value="[status]" />
+
+     <set var="RelayAction" value="[r6off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r6status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_6" value="[status]" />
+
+     <set var="RelayAction" value="[r7on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r7status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_7" value="[status]" />
+
+     <set var="RelayAction" value="[r7off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r7status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_7" value="[status]" />
+
+     <set var="RelayAction" value="[r8on]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r8status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_8" value="[status]" />
+
+     <set var="RelayAction" value="[r8off]" />
+     <run script="SetRelay" />
+     <set var="RelayStatus" value="[r8status]" />
+     <run script="ReadRelayStatus" />
+     <set var="Relay_8" value="[status]" />
+  </script>
+    
+  <script name="SetRelay">
+    <!-- Call this script via <run script="subscript2" /> -->
+    <setdevice name="NCD_RelayBoard" />
+    <set var="0xNCDresponse" value="00" />
+    <send string="[RelayAction]" type ="Hex" behavior="TT" trigger="5" terminator="5" 
+    keeptrigger="true" keepterminator="false" var="0xNCDresponse" timeout="1000"/>
+
+    <if condition="[0xNCDresponse] != 55" onfail="true" >
+      <log message="**** INVALID RESPONSE *****" />
+      <set var="SystemMessage" value="Comms Error" />
+      <pause seconds="3" />
+      <kill message="Profile ended - invalid response from NCD!" />
+     <else>
+       <set var="SystemMessage" value="Comms Good" />
+     </else>
+   </if>
+   <set var="RelayAction"  value="" />
+  </script>
+
+  <script name="ReadSupplyVolts">
+    <set var="SupplyVolts" type="byte" />
+    <setdevice name="NCD_RelayBoard" />
+    <send string="FE 96" type ="Hex" behavior="numberofbytes" bytes="1" var="HexVolts" timeout="1000"/>
+    <parse type="hex2vars" hexvar="HexVolts" vars="SupplyVolts" />
+    <math var="SupplyVolts" expression="[SupplyVolts]*0.0582+1.1663" />
+    <math var="SupplyVolts" expression="Round([SupplyVolts],1)" />
+    <if condition="([SupplyVolts] LT 11.6)">
+        <set var="VoltsFlag" value="1"/>
+        <set var="SysMessage" value="Warning -- Low Power Supply!"/>
+        <run script="ActiveChnlsOff"/>
+        <run script="WriteOutput"/>
+        <else>
+            <set var="VoltsFlag" value="0"/>
+            <run script="ActiveChnlsOn"/>
+        </else>
+    </if>
+  </script>
+  
+  <script name="AllOff" >
+    <set var="RelayAction" value="[AllOff]" />
+    <run script="SetRelay" />
+  </script>
+
+   <script name="Chnl1on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r1on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Chnl1off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r1off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Chnl2on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r2on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Chnl2off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r2off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Chnl3on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r3on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Chnl3off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r3off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay5on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r5on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay5off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r5off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay6on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r6on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay6off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r6off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay7on" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r7on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="Relay7off" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r7off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="PumpOn" >
+    	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r8on]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="PumpOff" >
+   	<setdevice name="NCD_RelayBoard" />
+    	<set var="RelayAction" value="[r8off]" />
+    	<run script="SetRelay" />
+   </script>
+
+   <script name="ActiveChnlOn" >
+	<setdevice name="NCD_RelayBoard" />
+	<if condition="[Chnl]==1" >
+		<set var="SysMessage" value="Nitrate Channel On" />
+		<run script="WriteOutput" />
+		<run script="Chnl1on" />
+	</if>
+	<if condition="[Chnl]==2" >
+		<set var="SysMessage" value="Phosphate Channel On" />
+		<run script="WriteOutput" />
+		<run script="Chnl2on" />
+	</if>
+	<if condition="[Chnl]==3" >
+		<set var="SysMessage" value="Ammonium Channel On" />
+		<run script="WriteOutput" />
+		<run script="Chnl3on" />
+	</if>
+	<pause ms="500" />
+   </script>
+
+   <script name="ActiveChnlOff" >
+	<setdevice name="NCD_RelayBoard" />
+	<if condition="[Chnl]==1" >
+		<run script="Chnl1off" />
+	</if>
+	<if condition="[Chnl]==2" >
+		<run script="Chnl2off" />
+	</if>
+	<if condition="[Chnl]==3" >
+		<run script="Chnl3off" />
+	</if>
+   </script>
+
+
+</scripts>

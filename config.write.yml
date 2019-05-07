@@ -1,0 +1,232 @@
+file: "NuLAB_Logging.csv"
+mode: write
+title: "NuLAB Logging v1.3"
+refresh: true
+refresh_seconds: 5
+
+window:
+  height: 700
+  width: 375
+  font-scaling: 80
+  background-color: "#C4F2ED"
+
+tabs:
+  - title: Calibration Parameters
+    key: 1
+  - title: Alerts and File Transfer
+    key: 2
+  - title: Logging Cycle
+    key: 3
+
+
+fields:
+
+  - tab: 1
+    header: Reagent Blank Absorbance
+    label: N+N
+    type: textbox
+
+  - tab: 1
+    label: Nitrite
+    type: textbox
+
+  - tab: 1
+    label: Phosphate
+    type: textbox
+
+  - tab: 1
+    label: Ammonium
+    type: textbox
+
+  - tab: 1
+    header: On-board Standard Concentration
+    label: N+N
+    type: textbox
+
+  - tab: 1
+    label: Nitrite
+    type: textbox
+
+  - tab: 1
+    label: Phosphate
+    type: textbox
+
+  - tab: 1
+    label: Ammonium
+    type: textbox
+
+  - tab: 1
+    label: Unit
+    type: select
+    options:
+      - mg/L
+      - ug/L
+      - mM
+      - uM
+      - ppb
+      - ppm
+
+
+  - tab: 1
+    label: Station Name
+    type: textbox
+
+  - tab: 2
+    header: Email Addresses for Alerts
+    label: Email 1
+    units: no spaces
+    type: textbox
+
+  - tab: 2
+    label: Email 2
+    units: no spaces
+    type: textbox
+
+  - tab: 2
+    label: Email 3
+    units: no spaces
+    type: textbox
+
+  - tab: 2
+    label: Email 4
+    units: no spaces
+    type: textbox
+
+  - tab: 2
+    label: Email 5
+    units: no spaces
+    type: textbox
+
+  - tab: 2
+    header: Automatic File Transfer
+    label: Transfer Files
+    type: checkbox
+    on_value: 1
+    off_value: 0
+    
+  - tab: 2
+    label: Monthly Rollover
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 2
+    label: Use SFTP
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 2
+    label: Inlet Water Check
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    header: Channels to Run
+    label: N+N
+    type: checkbox
+    on_value: 1
+    off_value: 0
+    
+  - tab: 3
+    label: Nitrite
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    label: Phosphate
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    label: Ammonium
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    header: Logging Sequence
+    label: Pump Run Time
+    units: seconds
+    type: textbox
+
+  - tab: 3 
+    label: Inlet Flushes per Sample
+    type: select
+    options:
+      - 1   
+      - 2
+      - 3
+      - 4
+      - 5
+      
+  - tab: 3
+    label: Smp.Temp.Equil.
+    type: textbox
+    unit: minutes
+
+  - tab: 3 
+    label: Samples per On-Board Std.
+    type: select
+    options:
+      - 1   
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+
+  - tab: 3
+    label: N+N Backflush
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    label: PO4 Backflush
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    label: NH4 Backflush
+    type: checkbox
+    on_value: 1
+    off_value: 0
+
+  - tab: 3
+    label: Analysis Cycle Interval
+    units: minutes
+    type: textbox
+
+  - tab: 3
+    label: Start Time
+    units: HH:MM
+    type: textbox
+
+  - tab: 3
+    label: End Date
+    units: MM/DD/YYYY
+    type: textbox
+
+  - tab: 3
+    label: End Hour
+    units: HH
+    type: textbox
+ 
+  - tab: 3
+    label: Start Logging
+    type: checkbox
+    on_value: 1
+    off_value: 0
+    
+
+
+    
