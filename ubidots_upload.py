@@ -88,6 +88,7 @@ def getKeyPayload(filePath,channel):
 	OBSconcLoc = variables.index("OBS_conc")
 	SmpabsLoc = variables.index("Smp_abs")
 	SmpconcLoc = variables.index("Smp_conc")
+	LightLoc = variables.index("Light")		 
 	macro1 = []
 	macro2 = []
 	#Reverse lines so the newest data will appear first in array	
@@ -113,8 +114,8 @@ def getKeyPayload(filePath,channel):
 	macro2Timestamp = ((macro2DateTime - datetime(1970,1,1)).total_seconds())*1000
 
 	for x in range(len(variables)):
-		#variable = variables[x].split('(')[0]
-		if variables[x] in ['OBS_abs','OBS_conc']:
+		#Only need Obs light from Macro2
+		if variables[x] in ['OBS_abs','OBS_conc','Light']:
 			dateTime = macro2Timestamp
 			data = macro2
 		elif variables[x] in ['Smp_abs','Smp_conc']:
