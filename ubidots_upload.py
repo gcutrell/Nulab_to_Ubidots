@@ -88,7 +88,7 @@ def getKeyPayload(filePath,channel):
 	OBSconcLoc = variables.index("OBS_conc")
 	SmpabsLoc = variables.index("Smp_abs")
 	SmpconcLoc = variables.index("Smp_conc")
-	LightLoc = variables.index("Light")		 
+	#LightLoc = variables.index("Light")		 
 	macro1 = []
 	macro2 = []
 	#Reverse lines so the newest data will appear first in array	
@@ -113,14 +113,36 @@ def getKeyPayload(filePath,channel):
 	macro2DateTime = datetime.strptime(macro2[0][0],buoyDateFormat)	
 	macro2Timestamp = ((macro2DateTime - datetime(1970,1,1)).total_seconds())*1000
 
+
 	for x in range(len(variables)):
-		#Only need Obs light from Macro2
-		if variables[x] in ['OBS_abs','OBS_conc','Light']:
+		if variables[x] in ['OBS_abs','OBS_conc']:
 			dateTime = macro2Timestamp
-			data = macro2
+			dataSend = macro2
 		elif variables[x] in ['Smp_abs','Smp_conc']:
 			dateTime = macro1Timestamp
-			data = macro1
+			dataSend = macro1
+		#Case if parmater is used in both OBS and Sample 
+		elif variables[x] in ['Light']:
+			paramName1 = channel+"-Smp_"+variables[x]
+			paramName2 = channel+"-OBS_"+variables[x]
+			updateValue1 = get_valueExistence("industrial.api.ubidots.com", paramName1, macro1Timestamp)
+			if (updateValue1 is False):
+				#NaN's will cause error. Pass sending variable. 
+				try:
+					value = float(macro1[0][x])
+					payload[paramName1] ={'value':value,'timestamp':macro1Timestamp}
+				except:
+					continue
+			updateValue2 = get_valueExistence("industrial.api.ubidots.com", paramName2, macro2Timestamp)
+			if (updateValue2 is False):
+				#NaN's will cause error. Pass sending variable. 
+				try:
+					value = float(macro2[0][x])
+					payload[paramName2] ={'value':value,'timestamp':macro2Timestamp}
+				except:
+					continue
+			#Skip to next variable
+			continue
 		else:
 			continue
 
