@@ -151,7 +151,7 @@ def getKeyPayload(filePath,channel):
 		if (updateValue is False):
 			#NaN's will cause error. Pass sending variable. 
 			try:
-				value = float(data[0][x])
+				value = float(dataSend[0][x])
 				payload[paramName] ={'value':value,'timestamp':dateTime}
 			except:
 				continue
