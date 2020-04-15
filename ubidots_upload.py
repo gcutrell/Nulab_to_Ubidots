@@ -84,13 +84,24 @@ def getKeyPayload(filePath,channel):
 		macroLoc = variables.index("Macro")
 	except: 
 		return payload	
-	OBSabsLoc = variables.index("OBS_abs")
-	OBSconcLoc = variables.index("OBS_conc")
-	SmpabsLoc = variables.index("Smp_abs")
-	SmpconcLoc = variables.index("Smp_conc")
-	#LightLoc = variables.index("Light")		 
+	
+	#Dissolved and total chemistry has different headers
+	try:
+		OBSabsLoc = variables.index("OBS_abs")
+		OBSconcLoc = variables.index("OBS_conc")
+		SmpabsLoc = variables.index("Smp_abs")
+		SmpconcLoc = variables.index("Smp_conc")
+	except:
+		try:
+			TN_SmpabsLoc = variables.index("TN_Smp_Abs")
+			TN_SmpconcLoc = variables.index("TN_Smp_Conc")
+		except:
+			TP_SmpconcLoc = variables.index("TP_Smp_Conc")
+			TP_SmpabsLoc = variables.index("TP_Smp_Abs")
+	
 	macro1 = []
 	macro2 = []
+	macro8 = []
 	#Reverse lines so the newest data will appear first in array	
 	for d in reversed(lines):
 		#Will fail for lines were array location does not exist		
@@ -99,7 +110,10 @@ def getKeyPayload(filePath,channel):
 			if data[macroLoc] == "M1" and data[SmpconcLoc]:
 				macro1.append(data)
 			elif data[macroLoc] == "M2" and data[OBSconcLoc]:
-				macro2.append(data)		
+				macro2.append(data)	
+			elif data[macroLoc] == "M8" and data[15]:
+				macro8.append(data)
+				
 		except:
 			pass
 
@@ -108,11 +122,16 @@ def getKeyPayload(filePath,channel):
 		return payload
 
 	#Create Unix time in milliseconds from first timestamp always located in first array location
-	macro1DateTime = datetime.strptime(macro1[0][0],buoyDateFormat)	
-	macro1Timestamp = ((macro1DateTime - datetime(1970,1,1)).total_seconds())*1000
-	macro2DateTime = datetime.strptime(macro2[0][0],buoyDateFormat)	
-	macro2Timestamp = ((macro2DateTime - datetime(1970,1,1)).total_seconds())*1000
-
+	SmpTimestamp = []
+	ObsTimestamp = []
+	try:
+		SmpDateTime = datetime.strptime(macro1[0][0],buoyDateFormat)	
+		SmpTimestamp = ((SmpDateTime - datetime(1970,1,1)).total_seconds())*1000
+		ObsDateTime = datetime.strptime(macro2[0][0],buoyDateFormat)	
+		ObsTimestamp = ((ObsDateTime - datetime(1970,1,1)).total_seconds())*1000
+	except:
+		SmpDateTime = datetime.strptime(macro8[0][0],buoyDateFormat)	
+		SmpTimestamp = ((SmpDateTime - datetime(1970,1,1)).total_seconds())*1000
 
 	for x in range(len(variables)):
 		if variables[x] in ['OBS_abs','OBS_conc']:
@@ -121,6 +140,11 @@ def getKeyPayload(filePath,channel):
 		elif variables[x] in ['Smp_abs','Smp_conc']:
 			dateTime = macro1Timestamp
 			dataSend = macro1
+		elif variables[x] in ['TP_Smp_Abs','TN_Smp_Abs','TP_Smp_Conc','TN_Smp_Conc']:
+			#Remove TN_/TP_ from variable name
+			variables[x] = variables[x].split('_',1)[1]
+			dateTime = SmpTimestamp
+			dataSend = macro8
 		#Case if parmater is used in both OBS and Sample 
 		elif variables[x] in ['Light']:
 			paramName1 = channel+"-Smp_"+variables[x]
@@ -130,22 +154,30 @@ def getKeyPayload(filePath,channel):
 				#NaN's will cause error. Pass sending variable. 
 				try:
 					value = float(macro1[0][x])
-					payload[paramName1] ={'value':value,'timestamp':macro1Timestamp}
+					payload[paramName1] ={'value':value,'timestamp':SmpTimestamp}
 				except:
-					continue
-			updateValue2 = get_valueExistence("industrial.api.ubidots.com", paramName2, macro2Timestamp)
-			if (updateValue2 is False):
-				#NaN's will cause error. Pass sending variable. 
-				try:
-					value = float(macro2[0][x])
-					payload[paramName2] ={'value':value,'timestamp':macro2Timestamp}
-				except:
-					continue
-			#Skip to next variable
-			continue
+					try:			
+						value = float(macro8[0][x])
+						payload[paramName1] = {'value':value,'timestamp':SmpTimestamp}
+					except:
+						continue
+			#Only check if there is an OBS 			
+			if (ObsTimestamp):
+				updateValue2 = get_valueExistence("industrial.api.ubidots.com", paramName2, ObsTimestamp)
+				if (updateValue2 is False):
+					#NaN's will cause error. Pass sending variable. 
+					try:
+						value = float(macro2[0][x])
+						payload[paramName2] ={'value':value,'timestamp':ObsTimestamp}
+					except:
+						continue
+				#Skip to next variable
+				continue
+			else:
+				continue
 		else:
 			continue
-
+			
 		paramName = channel+"-"+variables[x]
 		updateValue = get_valueExistence("industrial.api.ubidots.com", paramName, dateTime)
 		if (updateValue is False):
