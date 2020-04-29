@@ -48,7 +48,7 @@ def get_valueSentCheck(variable,dateTime):
 			sent = False
 	else:
 		dctData = {variable:dateTime}
-		sent = false
+		sent = False
 		
 	#Write out dict whether or not modified		
 	f2 = open('ubidots_lastSend.json','w+')	
