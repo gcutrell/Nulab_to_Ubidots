@@ -14,7 +14,7 @@ global variables
 BASE_DIR=os.path.dirname(os.path.realpath(__file__))
 #FolderName = ''			#Use if placed in folder above data.  
 ENDPOINT = "industrial.api.ubidots.com"
-device = "PotatoRun_NuLab"
+device = "###############"
 token = "BBFF-3SW5GCgLEF4DVUpYRNMylqFyXAFUDA"	#LTI Token
 buoyDateFormat = '%m/%d/%Y %H:%M:%S'
 
@@ -211,8 +211,8 @@ def main():
 		payload = getKeyPayload(x,channel)
 		# Send try sending to Ubidots if there is data in payload
 		if payload:
-			#post_var(payload,"industrial.api.ubidots.com",device,token)
-			print(payload)
+			post_var(payload,"industrial.api.ubidots.com",device,token)
+			#print(payload)
 		else:
 			print("No data for channel {}.".format(channel))
 	print("Run finished at {}.".format(datetime.now()))
