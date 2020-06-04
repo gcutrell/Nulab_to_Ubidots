@@ -99,7 +99,8 @@ def getKeyPayload(filePath,channel):
 			elif data[macroLoc] == "M2" and data[OBSconcLoc]:
 				macro2.append(data)
 			elif data[macroLoc] == "M8" and data[15]:
-				macro8.append(data)
+				if not "CalMode" in data[4]:
+					macro8.append(data)				
 					
 		except:
 			pass
