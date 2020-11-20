@@ -13,8 +13,8 @@ global variables
 '''
 BASE_DIR=os.path.dirname(os.path.realpath(__file__))
 #FolderName = ''			#Use if placed in folder above data.  
-ENDPOINT = "industrial.api.ubidots.com"
-device = "###############"
+ENDPOINT = "169.55.61.243"
+device = "#######_nulab"
 token = "BBFF-3SW5GCgLEF4DVUpYRNMylqFyXAFUDA"	#LTI Token
 buoyDateFormat = '%m/%d/%Y %H:%M:%S'
 
@@ -100,7 +100,7 @@ def getKeyPayload(filePath,channel):
 				macro2.append(data)
 			elif data[macroLoc] == "M8" and data[15]:
 				if not "CalMode" in data[4]:
-					macro8.append(data)				
+					macro8.append(data)
 					
 		except:
 			pass
@@ -177,17 +177,16 @@ def getKeyPayload(filePath,channel):
 def post_var(payload, url, device, token):
 
 	try:
-		url = "https://{}/api/v1.6/devices/{}".format(url, device)
+		url = "http://{}/api/v1.6/devices/{}".format(url, device)
 		headers = {"X-Auth-Token": token, "Content-Type": "application/json"}
 		attempts = 0
 		status_code = 400
-		print(payload)
-		while status_code >= 400 and attempts < 5:
+		while status_code >= 400 and attempts < 2:
 			print("[INFO] Sending data, attempt number: {}".format(attempts))
 			req = requests.post(url=url, headers=headers,data=json.dumps(payload))
 			status_code = req.status_code
 			attempts += 1
-			time.sleep(1)
+			time.sleep(10)
 		#print("[INFO] Results:")
 		print(req.text)
 		print("Data has been succesfully sent to Ubidots for station {}.".format((device)))
@@ -201,6 +200,7 @@ def main():
 	#Retrieve all files that end in .txt. Extract channel type from basename.	
 	#dataList = glob.glob(os.path.join(BASE_DIR,FolderName+'/'+'*-L.txt'))	
 	dataList = glob.glob(os.path.join(BASE_DIR,'*-L.txt'))	
+	payload = {}	
 	for x in dataList:
 		base = os.path.basename(x)
 		channel = os.path.splitext(base)[0]
@@ -209,13 +209,17 @@ def main():
 			channel = "N-N"
 		print(channel)
 		#Retrieve data from source and build payload from file
-		payload = getKeyPayload(x,channel)
-		# Send try sending to Ubidots if there is data in payload
-		if payload:
-			post_var(payload,"industrial.api.ubidots.com",device,token)
-			#print(payload)
-		else:
-			print("No data for channel {}.".format(channel))
+		payload_param = getKeyPayload(x,channel)
+		if payload_param:
+			payload.update(payload_param)
+
+	# Send try sending to Ubidots if there is data in payload
+	if payload:
+		post_var(payload,"industrial.api.ubidots.com",device,token)
+		print(payload)
+	else:
+		print("No data for channel {}.".format(channel))
+	
 	print("Run finished at {}.".format(datetime.now()))
 	
 if __name__ == "__main__":
