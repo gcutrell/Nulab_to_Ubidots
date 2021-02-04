@@ -131,7 +131,7 @@ def getKeyPayload(filePath,channel):
 			dateTime = SmpTimestamp
 			dataSend = macro8
 		#Case if parmater is used in both OBS and Sample 
-		elif variables[x] in ['Light']:
+		elif variables[x] in ['Light','Ref_Light']:
 			paramName1 = channel+"-Smp_"+variables[x]
 			paramName2 = channel+"-OBS_"+variables[x]
 			updateValue1 = get_valueSentCheck(paramName1, SmpTimestamp)
