@@ -87,7 +87,9 @@ def getKeyPayload(filePath,channel):
 			TP_SmpconcLoc = variables.index("TP_Smp_Conc")
 			TP_SmpabsLoc = variables.index("TP_Smp_Abs")
 	macro1 = []
+	macro1_ref = []	#Extract for ref light
 	macro2 = []
+	macro2_ref = []	#Extract for ref light
 	macro8 = []
 	#Reverse lines so the newest data will appear first in array	
 	for d in reversed(lines):
@@ -103,7 +105,14 @@ def getKeyPayload(filePath,channel):
 					macro8.append(data)
 					
 		except:
-			pass
+			#Try to extract macros for ref light
+			try:		
+				if data[macroLoc] == "M1":
+					macro1_ref.append(data)
+				elif data[macroLoc] == "M2":
+					macro2_ref.append(data)
+			except:
+				pass
 	#Check for empty data for macro1 or macro2 results. If empty then return empty payload
 	if not (macro1 or macro2 or macro8):
 		return payload
@@ -131,7 +140,7 @@ def getKeyPayload(filePath,channel):
 			dateTime = SmpTimestamp
 			dataSend = macro8
 		#Case if parmater is used in both OBS and Sample 
-		elif variables[x] in ['Light','Ref_Light']:
+		elif variables[x] in ['Light']:
 			paramName1 = channel+"-Smp_"+variables[x]
 			paramName2 = channel+"-OBS_"+variables[x]
 			updateValue1 = get_valueSentCheck(paramName1, SmpTimestamp)
@@ -140,6 +149,10 @@ def getKeyPayload(filePath,channel):
 				try:
 					value = float(macro1[0][x])
 					payload[paramName1] ={'value':value,'timestamp':SmpTimestamp}
+					#Send ref light also
+					paramName1 = paramName1 + "_Ref"
+					value2 = float(macro1_ref[0][x])
+					payload[paramName1] ={'value':value2,'timestamp':SmpTimestamp}
 				except:
 					try:			
 						value = float(macro8[0][x])
@@ -154,6 +167,10 @@ def getKeyPayload(filePath,channel):
 					try:
 						value = float(macro2[0][x])
 						payload[paramName2] ={'value':value,'timestamp':ObsTimestamp}
+						#Send ref light also
+						paramName2 = paramName2 + "_Ref"
+						value2 = float(macro2_ref[0][x])
+						payload[paramName2] ={'value':value2,'timestamp':SmpTimestamp}
 					except:
 						continue
 				#Skip to next variable
