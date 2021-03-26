@@ -232,7 +232,7 @@ def main():
 
 	# Send try sending to Ubidots if there is data in payload
 	if payload:
-		post_var(payload,"industrial.api.ubidots.com",device,token)
+		post_var(payload,ENDPOINT,device,token)
 		print(payload)
 	else:
 		print("No data for channel {}.".format(channel))
