@@ -13,7 +13,7 @@ global variables
 '''
 BASE_DIR=os.path.dirname(os.path.realpath(__file__))
 #FolderName = ''			#Use if placed in folder above data.  
-ENDPOINT = "169.55.61.243"
+ENDPOINT = "industrial.api.ubidots.com"
 device = "#######_nulab"
 token = "BBFF-3SW5GCgLEF4DVUpYRNMylqFyXAFUDA"	#LTI Token
 buoyDateFormat = '%m/%d/%Y %H:%M:%S'
