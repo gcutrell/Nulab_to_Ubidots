@@ -9,6 +9,11 @@ import json
 import traceback
 
 '''
+Crontab command
+*/30 * * * * /usr/bin/python2.7 /home/pi/ComScriptPi/profiles/NuLAB_Logging/unbidots_upload.py >> /home/pi/ComScriptPi/profiles/NuLAB_Logging/ubidots.log 2>&1
+'''
+
+'''
 global variables
 '''
 BASE_DIR=os.path.dirname(os.path.realpath(__file__))
